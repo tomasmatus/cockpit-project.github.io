@@ -57,6 +57,10 @@ promise.then(user =&gt; { ... });
 <td><p>This is unix user id.</p></td>
 </tr>
 <tr>
+<td><p><span class="term"><code class="code">"gid"</code></span></p></td>
+<td><p>This is unix user group id.</p></td>
+</tr>
+<tr>
 <td><p><span class="term"><code class="code">"name"</code></span></p></td>
 <td><p>This is the unix user name like <code class="code">"root"</code>.</p></td>
 </tr>
@@ -66,7 +70,8 @@ promise.then(user =&gt; { ... });
 </tr>
 <tr>
 <td><p><span class="term"><code class="code">"groups"</code></span></p></td>
-<td><p>This is an array of group names to which the user belongs.</p></td>
+<td><p>This is an array of group names to which the user belongs.  Since
+        version 318, the first item in this list is the primary group.</p></td>
 </tr>
 <tr>
 <td><p><span class="term"><code class="code">"home"</code></span></p></td>
@@ -79,13 +84,6 @@ promise.then(user =&gt; { ... });
 </tbody>
 </table></div>
 <p>Returns a promise that completes once the user information is available.</p>
-</div>
-<div class="refsection">
-<a name="cockpit-info-changed"></a><h2>cockpit.user.onchanged</h2>
-<pre class="programlisting">
-cockpit.user.addEventListener("changed", function() { ... })
-</pre>
-<p>This event is fired when the user info changes or first becomes available.</p>
 </div>
 <div class="refsection">
 <a name="cockpit-permission"></a><h2>Permission lookup</h2>

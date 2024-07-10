@@ -89,16 +89,6 @@ composer:
   description: |
      Composer is an interface for OSBuild that generates custom images suitable for deploying systems or uploading to the cloud. Images built with Composer are for RPM-based distributions such as Fedora, Red Hat Enterprise Linux, and CentOS.
 
-certificates:
-  title: Certificate Management
-  package: cockpit-certificates
-  source: https://github.com/cockpit-project/cockpit-certificates
-  issues: https://github.com/cockpit-project/cockpit-certificates/issues
-  official: true
-  prerelease: true
-  description: |
-    Certificate management app for Cockpit.
-
 sosreport:
   title: Diagnostic Reports
   package: cockpit-sosreport
@@ -107,11 +97,20 @@ sosreport:
   description: |
     Collect system configuration and diagnostic information from systems, to help with diagnosing problems.
 
+files:
+  title: Cockpit Files
+  package: cockpit-files
+  source: https://github.com/cockpit-project/cockpit-files
+  issues: https://github.com/cockpit-project/cockpit-files/issues
+  official: true
+  description: |
+    A featureful file browser for Cockpit.
+
 389-ds:
   title: 389 Directory Server
   package: cockpit-389-ds
   homepage: https://directory.fedoraproject.org/docs/389ds/download.html
-  source: 
+  source:
   description: |
     A web-based interface to the enterprise-class Open Source LDAP server for Linux.
 
@@ -127,7 +126,7 @@ subscriptions:
   title: Subscription Manager
   package: subscription-manager-cockpit
   source: https://github.com/candlepin/subscription-manager-cockpit
-  issues: 
+  issues:
   description: |
     Manage subscriptions to Red Hat Enterprise Linux from your web browser.
 
@@ -176,7 +175,7 @@ navigator:
   prerelease: false
   description: |
     A Featureful File Browser for Cockpit.
- 
+
 benchmark:
   title: Benchmark
   source: https://github.com/45Drives/cockpit-benchmark
@@ -196,7 +195,7 @@ tukit:
   description: |
     Upgrade systems based on transactional-update from OpenSUSE with tukit in
     your browser.
-    
+
 sensors:
   title: Sensors
   package: cockpit-sensors
@@ -206,7 +205,7 @@ sensors:
   license: LGPL 2.1
   description: |
     List all available sensors on the machine provided by `lm-sensors`.
-    
+
 tailscale:
   title: Tailscale
   package: cockpit-tailscale

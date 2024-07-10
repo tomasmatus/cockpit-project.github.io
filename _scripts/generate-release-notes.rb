@@ -15,6 +15,7 @@
   cockpit-machines
   cockpit-podman
   cockpit-ostree
+  cockpit-files
 ]
 
 # Common terms and definitions
@@ -32,6 +33,7 @@
   "EC2": 'Amazon Elastic Compute Cloud',
   "FIPS": 'Federal Information Processing Standard',
   "FMF": 'Flexible Metadata Format',
+  "GSoC": 'Google Summer of Code',
   "HTTP": 'Hypertext Transport Protocol',
   "IPA": 'identity management system ("Identity, Policy, Audit")',
   "LAN": 'Local Area Network',
@@ -86,8 +88,8 @@ VERSIONS ARE available now:
 
 @footer_dynamic = "
 * [NAME Source Tarball](https://github.com/cockpit-project/REPO/releases/tag/VERSIONS)
-* [NAME Fedora 38](https://bodhi.fedoraproject.org/updates/?releases=F38&packages=REPO)
-* [NAME Fedora 37](https://bodhi.fedoraproject.org/updates/?releases=F37&packages=REPO)
+* [NAME Fedora 40](https://bodhi.fedoraproject.org/updates/?releases=F40&packages=REPO)
+* [NAME Fedora 39](https://bodhi.fedoraproject.org/updates/?releases=F39&packages=REPO)
 "
 
 ### Code below ###
@@ -376,5 +378,6 @@ begin
   puts "Generated release notes for Cockpit #{@cockpit_version}: _posts/#{markdown_filename}"
   puts "Downloaded images: #{@files_images.join(' ')}"
 rescue StandardError => e
+  puts e.backtrace
   puts "Error (#{e})"
 end

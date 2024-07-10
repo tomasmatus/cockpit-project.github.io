@@ -20,7 +20,7 @@ remote, for example with
 
 ## Setting up development container
 
-The cockpit team maintains a [cockpit/tasks container](https://quay.io/repository/cockpit/tasks)
+The cockpit team maintains a [cockpit/tasks container](https://ghcr.io/cockpit-project/tasks)
 for both local development and CI. If you can install [toolbx](https://containertoolbx.org/) or
 [distrobox](https://distrobox.privatedns.org/) on your system, it is highly
 recommended to do that:
@@ -41,7 +41,7 @@ recommended to do that:
 
 2. Create a development toolbox for Cockpit
 
-       toolbox create --image quay.io/cockpit/tasks -c cockpit
+       toolbox create --image ghcr.io/cockpit-project/tasks -c cockpit
 
 3. Enter the toolbox:
 
@@ -55,7 +55,7 @@ toolbox container. If desired, you can install additional packages with
 The Cockpit team occasionally refreshes the `tasks` container image.
 To re-create your development container from the latest image, run:
 
-    podman pull quay.io/cockpit/tasks
+    podman pull ghcr.io/cockpit-project/tasks
     toolbox rm cockpit
 
 ...and then repeat steps 2 and 3 from above.
@@ -96,9 +96,6 @@ If you work on a change that affects multiple pages (such as a file in
 pkg/lib/), you can also build all pages:
 
     ./build.js -w
-
-Note that this enables eslint and stylelint by default -- if you want to
-disable them, run it with `-e`/`--no-eslint` and/or `-s`/`--no-stylelint`.
 
 Reload cockpit in your browser after page is built. Press `Ctrl`-`C` to
 stop watch mode once you are done with changing the code.
@@ -185,13 +182,42 @@ git submodules:
 Refer to the [testing README](test/README.md) for details on running the Cockpit
 integration tests locally.
 
-## Testing the Python bridge
+## Python bridge
 
-Cockpit currently has an experimental replacement for `cockpit-bridge`
-written in Python.  It resides in `src/cockpit` with most of its rules in
-`src/Makefile.am`.  This directory was chosen because it matches the standard
-so-called "src layout" convention for Python packages, where each package
-(`cockpit`) is a subdirectory of the `src` directory.
+Most distro releases now ship a replacement for the C bridge written in Python.
+It resides in `src/cockpit` with most of its rules in `src/Makefile.am`.  This
+directory was chosen because it matches the standard so-called "src layout"
+convention for Python packages, where each package (`cockpit`) is a
+subdirectory of the `src` directory.
+
+### Running the bridge
+
+The Python bridge can be used interactively on a local machine:
+
+    PYTHONPATH=src python3 -m cockpit.bridge
+
+To make it easy to test out channels without having to write out messages
+manually, `cockpit.misc.print` can be used:
+
+    PYTHONPATH=src python3 -m cockpit.misc.print open fslist1 path=/etc watch=False | PYTHONPATH=src python3 -m cockpit.bridge
+
+These shell aliases might be useful when experimenting with the protocol:
+
+    alias cpy='PYTHONPATH=src python3 -m cockpit.bridge'
+    alias cpf='PYTHONPATH=src python3 -m cockpit.misc.print'
+
+When working with the Python bridge on test images, note that `rhel-8*` still
+uses the C bridge. So if you want to explicitly have the Python bridge on those
+images use:
+
+    ./test/image-prepare --python
+
+To enable debug logging in journal on a test image, you can pass `--debug` to
+`image-prepare`. This will set `COCKPIT_DEBUG=all` to `/etc/environment`, if
+you are only interested channel debug messages change `all` to
+`cockpit.channel`.
+
+### Testing the Python bridge
 
 There are a growing number of Python `unittest` tests being written to test
 parts of the new bridge code.  You can run these with `make pytest` or
@@ -206,7 +232,7 @@ The tests require at least `pytest` 7.0.0 or higher to run.
 Cockpit uses [ESLint](https://eslint.org/) to automatically check JavaScript
 code style in `.js` and `.jsx` files.
 
-The linter is executed on every build.
+The linter is executed as part of `test/static-code`.
 
 For developer convenience, the ESLint can be started explicitly by:
 
@@ -228,11 +254,14 @@ unused identifiers, and other JavaScript-related issues.
 Cockpit uses [Stylelint](https://stylelint.io/) to automatically check CSS code
 style in `.css` and `.scss` files.
 
-The linter is executed on every build.
+The linter is executed as part of `test/static-code`.
 
 For developer convenience, the Stylelint can be started explicitly by:
 
     npm run stylelint
+
+But note that this only covers files in `pkg/`. `test/static-code` covers
+*all* (S)CSS files tracked in git.
 
 Some rule violations can be automatically fixed by running:
 
@@ -349,13 +378,17 @@ A local cache is maintained in `~/.cache/cockpit-dev`.
 Make a pull request on github.com with your change. All changes get reviewed,
 tested, and iterated on before getting into Cockpit. The general workflow is
 described in the [wiki](https://github.com/cockpit-project/cockpit/wiki/Workflow).
-Don't feel bad if there's multiple steps back and forth asking for changes or
-tweaks before your change gets in.
 
 You need to be familiar with git to contribute a change. Do your changes
 on a branch. Your change should be one or more git commits that each contain one
 single logical simple reviewable change, without modifications that are
 unrelated to the commit message.
+
+Don't feel bad if there's multiple steps back and forth asking for changes or
+tweaks before your change gets in. If you fix your commits after getting a
+review, just force-push to your branch -- this will update the pull request
+automatically. Do *not* close it and open a new one; that would destroy the
+conversation and reviews.
 
 Cockpit is a designed project. Anything that the user will see should have
 design done first. This is done on the wiki and mailing list.
@@ -448,6 +481,20 @@ Cockpit log out, use something like:
 
     >> localStorage.debugging = "spawn"
 
+## Using React Developer Tools
+
+Cockpit uses React for the JavaScript frontend, [React Developer
+Tools](https://react.dev/learn/react-developer-tools) is a browser extension to
+inspect React components, edit props and state. Out of the box the developer
+tools do not work with Cockpit due to the pages being loaded in a separate
+iframe. A workaround is to load the page directly by embedding, for example for
+the system overview page:
+
+<http://localhost:9090/cockpit/@localhost/system/index.html>
+
+This loads the system overview as a standalone page allowing React Developer
+tools to inspect its state.
+
 ## Running Cockpit processes under a debugger
 
 You may want to run cockpit-ws under a debugger such as valgrind or gdb. You can
@@ -495,7 +542,7 @@ For running tests, the following dependencies are required:
 
     sudo dnf install curl expect xz rpm-build chromium-headless dbus-daemon \
         libvirt-daemon-driver-storage-core libvirt-daemon-driver-qemu libvirt-client python3-libvirt \
-        python3-flake8 python3-pyyaml
+        python3-pyyaml
 
 For compiling the C parts, you will need the package build dependencies:
 

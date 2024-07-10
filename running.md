@@ -231,7 +231,7 @@ When updating Cockpit-related packages and any dependencies, make sure to use `-
 {:.note}
 These commands require a POSIX compatible shell like `bash`. For other shells like `fish`, temporarily run `bash -i`.
 
-Cockpit is available in Ubuntu 17.04 and later, and available [as an official backport](https://help.ubuntu.com/community/UbuntuBackports) for 16.04 LTS and later.
+Cockpit is available in Ubuntu, with [updated versions in official backports for LTS releases](https://help.ubuntu.com/community/UbuntuBackports).
 
 We recommend installing or updating the latest version from backports. This repository is enabled by default, but if you customized apt sources you might need to [enable them manually](https://help.ubuntu.com/community/UbuntuBackports#Enabling_Backports).
 
@@ -240,13 +240,21 @@ We recommend installing or updating the latest version from backports. This repo
 sudo apt install -t ${VERSION_CODENAME}-backports cockpit
 ```
 
-On Linux Mint, use `UBUNTU_CODENAME` instead of `VERSION_CODENAME` like so:
-```
-sudo apt install -t ${UBUNTU_CODENAME}-backports cockpit
-```
-
 {:.note}
 When updating Cockpit-related packages and any dependencies, make sure to use `-t ...-backports` as above, so backports are included.
+
+
+### Arch Linux
+{:#archlinux}
+
+[Cockpit](https://archlinux.org/packages/extra/x86_64/cockpit/) is available in [Arch Linux](https://www.archlinux.org/packages/):
+```
+sudo pacman -S cockpit
+sudo systemctl enable --now cockpit.socket
+```
+
+If the first command fails with "database file for ... does not exist", refresh/update your system with `sudo pacman -Syu` first.
+
 
 ### Clear Linux
 {:#clearlinux}
@@ -259,22 +267,10 @@ sudo systemctl enable --now cockpit.socket
 ```
 
 
-### Arch Linux
-{:#archlinux}
-
-[Cockpit](https://www.archlinux.org/packages/community/x86_64/cockpit/) is available in [Arch Linux](https://www.archlinux.org/packages/):
-```
-sudo pacman -S cockpit
-sudo systemctl enable --now cockpit.socket
-```
-
-If the first command fails with "database file for ... does not exist", refresh/update your system with `sudo pacman -Syu` first.
-
-
-### openSUSE Tumbleweed
+### openSUSE Tumbleweed and Leap 
 {:#tumbleweed}
 
-[Cockpit](https://software.opensuse.org/package/cockpit) is available in [openSUSE Tumbleweed](https://software.opensuse.org/distributions/tumbleweed):
+[Cockpit](https://software.opensuse.org/package/cockpit) is available in both [openSUSE Tumbleweed](https://get.opensuse.org/tumbleweed) and [openSUSE Leap](https://get.opensuse.org/leap) starting by 15.6:
 
 
 1. Install cockpit:
@@ -290,6 +286,9 @@ If the first command fails with "database file for ... does not exist", refresh/
 # firewall-cmd --permanent --zone=public --add-service=cockpit
 # firewall-cmd --reload
 ```
+4. Optionally allow root access (disabled by default)
+```
+# sudo $EDITOR_OF_CHOICE /etc/cockpit/disallowed-users
 
 ### SUSE Linux Enterprise Micro
 {:#slemicro}

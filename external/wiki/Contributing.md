@@ -7,14 +7,15 @@ source: https://github.com/cockpit-project/cockpit/wiki/Contributing
 
 Since you're considering contributing, you are likely already using Cockpit. If not, first install Cockpit on your local machine as described in:
 
-https://cockpit-project.org/running.html
+[https://cockpit-project.org/running.html]({{ site.baseurl }}/running.html)
 
 ### Getting Started
  * Check out the [git repo](https://github.com/cockpit-project/cockpit), learn how to build it and run it. Change a string in the code somewhere and make sure you can see the change in the browser. See [HACKING.md]({{ site.baseurl }}/external/source/HACKING.html) for details.
  * Keep in mind the [project ideals]({{ site.baseurl }}/ideals.html)
  * If you are looking for someplace to start developing, issues are marked [with a good-first-issue label](https://github.com/cockpit-project/cockpit/issues?q=is%3Aopen+is%3Aissue+label%3Agood-first-issue) when they are a good introduction to Cockpit and of limited scope.
  * [Documentation]({{ site.baseurl }}/guide/latest/) (be aware: possible version differences)
- * [Set up integration tests](https://github.com/cockpit-project/cockpit/blob/master/test/README.md). Automated tests are an important part of Cockpit and every new feature should be accompanied by its tests. 
+ * [Set up integration tests](https://github.com/cockpit-project/cockpit/blob/master/test/README.md). Automated tests are an important part of Cockpit and every new feature should be accompanied by its tests.
+ * Join the project's [GitHub Discussions page](https://github.com/cockpit-project/cockpit/discussions) to connect with the community, ask questions, and participate in discussions about the project's development and features.
 
 ### Issue tracker
 

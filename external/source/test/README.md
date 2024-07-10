@@ -3,8 +3,9 @@ title: Integration Tests of Cockpit
 source: https://github.com/cockpit-project/cockpit/blob/master/test/README.md
 ---
 
-This directory contains automated integration tests for Cockpit, and the support
-files for them.
+This directory contains automated integration tests for Cockpit, and the
+support files for them. The architecture of the automated integration tests is
+described in [ARCHITECTURE](./ARCHITECTURE.md)
 
 To run the tests on Fedora, refer to the [HACKING](../HACKING.md) guide for
 installation of all of the necessary build and test dependencies. There's
@@ -24,7 +25,7 @@ You first need to build cockpit, and install it into a VM:
 
     test/image-prepare
 
-This uses the default OS image, which is currently Fedora 38. See `$TEST_OS`
+This uses the default OS image, which is currently Fedora 39. See `$TEST_OS`
 below how to select a different one.
 
 In most cases you want to run an individual test in a suite, for example:
@@ -85,6 +86,16 @@ Once the machine is booted and the cockpit socket has been activated, a
 message will be printed describing how to access the virtual machine, via
 ssh and web.  See the "Helpful tips" section below.
 
+By default, it's only possible to contact the virtual machine from the host
+machine on which it's running.   If you want to conduct manual testing from
+other devices on your network, set `TEST_BIND_GLOBAL=1`, for example:
+
+     TEST_BIND_GLOBAL=1 bots/vm-run -s cockpit.socket debian-stable
+
+This will bind the Cockpit and SSH ports to all interfaces, making it possible
+to access a URL like http://yourhost.local:9091/ to test Cockpit from another
+machine on your LAN.
+
 ## Pixel tests
 
 Pixel tests in Cockpit ensure that updates of our dependencies or code changes
@@ -97,7 +108,7 @@ Pixel tests make a screenshot of a selector and compare it to a known good
 reference image. if there is a difference, the test fails and a pixel
 difference is shown.
 
-This works as our tests run in the [cockpit/tasks container](https://quay.io/repository/cockpit/tasks)
+This works as our tests run in the [cockpit/tasks container](https://ghcr.io/cockpit-project/tasks)
 which pins the browser and font rendering so repeated runs provide the same
 pixels. To generate new pixels, this tasks container must be used; your own
 browser and font rendering software might generate different results. For more
@@ -157,20 +168,18 @@ to push pixel tests.
 You can set these environment variables to configure the test suite:
 
     TEST_OS    The OS to run the tests in.  Currently supported values:
-                  "centos-8-stream"
+                  "centos-9-stream"
+                  "centos-10"
                   "debian-stable"
                   "debian-testing"
-                  "fedora-37"
-                  "fedora-38"
+                  "fedora-39"
+                  "fedora-40"
                   "fedora-coreos"
-                  "fedora-testing"
-                  "rhel-8-9"
-                  "rhel-8-9-distropkg"
-                  "rhel-9-3"
+                  "rhel-9-4"
                   "rhel4edge",
                   "ubuntu-2204"
                   "ubuntu-stable"
-               "fedora-38" is the default (TEST_OS_DEFAULT in bots/lib/constants.py)
+               "fedora-39" is the default (TEST_OS_DEFAULT in bots/lib/constants.py)
 
     TEST_JOBS  How many tests to run in parallel.  The default is 1.
 
